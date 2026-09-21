@@ -30,10 +30,16 @@ const CONFIG = {
   MAP_ZOOM:     2,
   MAP_MIN_ZOOM: 2,
   MAP_MAX_ZOOM: 18,
-  TILE_URL:  'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-  TILE_ATTR: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-  TILE_SUBS: 'abcd',
-  TILE_MAXZ: 20,
+  // TILE_URL:  'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+  // TILE_ATTR: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+  // TILE_SUBS: 'abcd',
+  // TILE_MAXZ: 20,
+
+  MAP_STYLE: 'https://tiles.openfreemap.org/styles/positron', //
+  // MAP_STYLE: 'https://tiles.openfreemap.org/styles/liberty', // detailed
+  // MAP_STYLE: 'https://tiles.openfreemap.org/styles/bright', //
+
+  
   SHOW_LABELS:      true,
   LABEL_MIN_ZOOM:   6,
   CLUSTER_RADIUS:   60,

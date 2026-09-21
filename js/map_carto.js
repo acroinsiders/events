@@ -1,19 +1,6 @@
-// version = "20260921-120000"
 /* ═══════════════════════════════════════════════════════════
    MAP  — Leaflet initialisation, markers, clusters, labels
-   Basemap: OpenFreeMap (vector tiles rendered by MapLibre GL
-   through the maplibre-gl-leaflet plugin). No API key needed.
    ═══════════════════════════════════════════════════════════ */
-
-/** OpenFreeMap style used when CONFIG.MAP_STYLE is not set.
- *  Available: 'liberty' (detailed), 'bright', 'positron' (light, closest to Carto Positron). */
-const DEFAULT_MAP_STYLE = 'https://tiles.openfreemap.org/styles/positron';
-
-/** Attribution required by OpenFreeMap / OpenMapTiles / OpenStreetMap. */
-const DEFAULT_MAP_ATTR =
-  '<a href="https://openfreemap.org" target="_blank" rel="noopener noreferrer">OpenFreeMap</a> ' +
-  '&copy; <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener noreferrer">OpenMapTiles</a> ' +
-  'Data from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>';
 
 /** Convert a hex colour + alpha to rgba(). */
 function hexToRgba(hex, alpha) {
@@ -35,15 +22,11 @@ function initMap() {
     maxZoom: CONFIG.MAP_MAX_ZOOM,
   });
 
-  // OpenFreeMap vector basemap (replaces the former Carto L.tileLayer).
-  if (typeof L.maplibreGL === 'function') {
-    L.maplibreGL({
-      style:       CONFIG.MAP_STYLE || DEFAULT_MAP_STYLE,
-      attribution: CONFIG.MAP_ATTR  || DEFAULT_MAP_ATTR,
-    }).addTo(map);
-  } else {
-    console.error('maplibre-gl-leaflet is not loaded — the OpenFreeMap basemap cannot be displayed.');
-  }
+  L.tileLayer(CONFIG.TILE_URL, {
+    attribution: CONFIG.TILE_ATTR,
+    subdomains:  CONFIG.TILE_SUBS,
+    maxZoom:     CONFIG.TILE_MAXZ,
+  }).addTo(map);
 
   cluster = L.markerClusterGroup({
     maxClusterRadius:       CONFIG.CLUSTER_RADIUS,
@@ -146,12 +129,13 @@ function redrawMap() {
 
   if (!vis.length) return;
 
+  
   // Spread markers that share the same coordinates so they don't pile up.
   // Group by rounded lat/lon key, then apply a tiny spiral offset per duplicate.
   const coordCount = {};
   const JITTER = 0.018; // degrees — ~2 km at equator, barely visible at low zoom
 
-  vis.forEach(r => {
+  visibleRows().forEach(r => {
     if (!isFinite(r._lat) || !isFinite(r._lon)) { addMarker(r); return; }
 
     const key = `${r._lat.toFixed(3)},${r._lon.toFixed(3)}`;
